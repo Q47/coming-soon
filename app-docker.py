@@ -108,13 +108,13 @@ def ical_to_filtered_list(ical_data):
             if dtstart > today:
                 summary = str(component.get('summary'))
                 logging.info(f"Analyzing: {summary} {dtstart}")
-                if "Digital Release" in summary:
-                    cleaned_summary = summary.replace(" (Digital Release)", "")
+                if "Digital Release" in summary or "Physical Release" in summary:
+                    cleaned_summary = summary.replace(" (Digital Release)", "").replace(" (Physical Release)", "")
                     dtstart_str = dtstart.strftime("%m/%d/%Y")
                     events.append((cleaned_summary, dtstart_str))
                     logging.info(f"Processing {cleaned_summary}")
                 else:
-                    logging.info("Not a digital release")
+                    logging.info("Not a digital or physical release")
 
     for component in calendar_sonarr.walk():
         if component.name == "VEVENT":
